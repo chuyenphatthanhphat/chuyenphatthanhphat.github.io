@@ -5,78 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Thành Phát Express</title>
   <style>
-    html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
-    #appFrame { width: 100%; height: 100vh; border: 0; display: block; }
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    iframe {
+      display: block;
+      width: 100%;
+      height: 100vh;
+      border: 0;
+    }
   </style>
 </head>
 <body>
-  <iframe id="appFrame" title="Thành Phát Express" allow="clipboard-read; clipboard-write"></iframe>
-
-  <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwN6v5tf8fys2gSOLMMiAEWaF_IgOv2512KoCD7lWlBbbfNovV6dscsZu50Mawq1Q9dcg/exec';
-    const frame = document.getElementById('appFrame');
-    const allowedPages = ['home', 'login', 'main', 'about', 'services', 'network', 'news'];
-
-    function currentRoute() {
-      const params = new URLSearchParams(location.search);
-      return {
-        page: allowedPages.includes(params.get('page')) ? params.get('page') : 'home',
-        session: params.get('session') || sessionStorage.getItem('tp_session_token') || ''
-      };
-    }
-
-    function updateBrowserUrl(page, session, replace) {
-      const params = new URLSearchParams();
-      if (page && page !== 'home') params.set('page', page);
-      if (session) params.set('session', session);
-      const url = location.pathname + (params.toString() ? '?' + params.toString() : '');
-      const state = { page: page, session: session || '' };
-      if (replace) history.replaceState(state, '', url);
-      else history.pushState(state, '', url);
-    }
-
-    function loadRoute(page, session, replace) {
-      page = allowedPages.includes(page) ? page : 'home';
-      if (session) sessionStorage.setItem('tp_session_token', session);
-      if (page === 'home') session = '';
-
-      let target = page === 'home'
-        ? SCRIPT_URL
-        : SCRIPT_URL + '?page=' + encodeURIComponent(page);
-
-      if (page === 'main' && session) {
-        target += '&session=' + encodeURIComponent(session);
-      }
-
-      frame.src = target;
-      updateBrowserUrl(page, session, replace);
-    }
-
-    window.addEventListener('message', function(event) {
-      const origin = event.origin || '';
-      const fromAppsScript =
-        origin === 'https://script.google.com' ||
-        origin.endsWith('.script.googleusercontent.com');
-
-      if (!fromAppsScript) return;
-
-      const message = event.data || {};
-      if (message.type !== 'TP_ROUTE') return;
-
-      loadRoute(
-        message.page || 'home',
-        message.session || sessionStorage.getItem('tp_session_token') || '',
-        false
-      );
-    });
-
-    window.addEventListener('popstate', function() {
-      const route = currentRoute();
-      loadRoute(route.page, route.session, true);
-    });
-
-    const initial = currentRoute();
-    loadRoute(initial.page, initial.session, true);
-  </script>
+  <iframe
+    src="https://script.google.com/macros/s/AKfycbxVoOfvNDujD2DsoVHUAAcaBEAkrhfRoCO57illyO4VQEQC_ULvIVRFtkRAR7DdMa-UMQ/exec"
+    title="Thành Phát Express">
+  </iframe>
 </body>
 </html>
